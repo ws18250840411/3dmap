@@ -36,16 +36,52 @@
             pitch: 50,
             rotation: -20,
         });
-        var model = new TMap.model.GLTFModel({
-            url: './Horse.gltf',
-            map: map,
-            id: 'model',
-            position: new TMap.LatLng(22.534266, 113.946442, 0),
-            scale: [250, 800, 100], // 模型在XYZ三轴上的缩放比例
-        });
-        // model资源加载完成回调
-        model.on('loaded', () => {
-            console.log('模型加载成功');
+
+        // 定义多个模型配置
+        var models = [
+            {
+                id: 'horse1',
+                url: './Horse.gltf',
+                position: new TMap.LatLng(22.534266, 113.946442, 0),
+                scale: [250, 800, 100],
+                rotation: [0, 0, 0] // 旋转角度 [x, y, z]
+            },
+            {
+                id: 'horse2',
+                url: './Horse.gltf',
+                position: new TMap.LatLng(22.535666, 113.94652, 0),
+                scale: [350, 350, 200],
+                rotation: [0, 0, 0] // 绕Y轴旋转45度
+            },
+        ];
+
+        // 存储模型实例的数组
+        var modelInstances = [];
+
+        // 批量创建模型
+        models.forEach(function (modelConfig) {
+            console.log(456456465)
+            var model = new TMap.model.GLTFModel({
+                url: modelConfig.url,
+                map: map,
+                id: modelConfig.id,
+                position: modelConfig.position,
+                scale: modelConfig.scale,
+                rotation: modelConfig.rotation
+            });
+
+            // 模型加载完成回调
+            model.on('loaded', function () {
+                console.log('模型 ' + modelConfig.id + ' 加载成功');
+            });
+
+            // 模型加载失败回调
+            model.on('error', function (error) {
+                console.error('模型 ' + modelConfig.id + ' 加载失败:', error);
+            });
+
+            // 将模型实例添加到数组中
+            modelInstances.push(model);
         });
     </script>
 </body>
